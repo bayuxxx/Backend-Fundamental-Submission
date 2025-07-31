@@ -13,7 +13,6 @@ const authenticationsPlugin = require("./api/authentications");
 const playlistsPlugin = require("./api/playlists");
 const collaborationsPlugin = require("./api/collaborations");
 const exportsPlugin = require("./api/exports");
-// const uploadsPlugin = require("./api/uploads"); 
 
 // services
 const AlbumsService = require("./services/postgres/AlbumsService");
@@ -23,9 +22,8 @@ const AuthenticationsService = require("./services/postgres/AuthenticationsServi
 const PlaylistsService = require("./services/postgres/PlaylistsService");
 const CollaborationsService = require("./services/postgres/CollaborationsService");
 const StorageService = require("./services/storage/StorageService");
-const CacheService = require("./services/redis/CacheService"); 
+const CacheService = require("./services/redis/CacheService");
 const ProducerService = require("./services/rabbitmq/ProducerService");
-
 
 // validator
 const AlbumsValidator = require("./validator/album");
@@ -35,7 +33,6 @@ const AuthenticationsValidator = require("./validator/authentication");
 const PlaylistsValidator = require("./validator/playlists");
 const CollaborationsValidator = require("./validator/collaborations");
 const ExportsValidator = require("./validator/exports");
-// const UploadsValidator = require("./validator/uploads"); 
 
 // tokenize
 const TokenManager = require("./tokenize/TokenManager");
@@ -73,7 +70,7 @@ const init = async () => {
       plugin: Inert,
     },
   ]);
-  
+
   server.auth.strategy("openmusic_jwt", "jwt", {
     keys: process.env.ACCESS_TOKEN_KEY,
     verify: {
@@ -90,23 +87,15 @@ const init = async () => {
     }),
   });
 
-  
   await server.register([
     {
       plugin: albumsPlugin,
       options: {
         service: albumsService,
-        storageService : storageService,
+        storageService,
         validator: AlbumsValidator,
       },
     },
-    // {
-    //   plugin: uploadsPlugin,
-    //   options: {
-    //     storageService,
-    //     validator: UploadsValidator,
-    //   },
-    // },
     {
       plugin: songsPlugin,
       options: {
@@ -179,21 +168,21 @@ const init = async () => {
 
     if (response.isBoom) {
       const newResponse = h.response({
-        status: 'fail',
+        status: "fail",
         message: response.message,
       });
       newResponse.code(response.output.statusCode);
       return newResponse;
     }
-    
+
     if (response instanceof Error) {
-        console.error(response);
-        const newResponse = h.response({
-            status: 'error',
-            message: 'Maaf, terjadi kegagalan pada server kami.',
-        });
-        newResponse.code(500);
-        return newResponse;
+      console.error(response);
+      const newResponse = h.response({
+        status: "error",
+        message: "Maaf, terjadi kegagalan pada server kami.",
+      });
+      newResponse.code(500);
+      return newResponse;
     }
 
     return h.continue;

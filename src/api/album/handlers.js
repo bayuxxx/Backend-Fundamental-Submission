@@ -83,7 +83,6 @@ class AlbumsHandler {
     return response;
   }
 
-  // --- [NEW METHOD] ---
   async postAlbumLikeHandler(request, h) {
     const { id: albumId } = request.params;
     const { id: userId } = request.auth.credentials;
@@ -98,8 +97,7 @@ class AlbumsHandler {
     return response;
   }
 
-  // --- [NEW METHOD] ---
-  async deleteAlbumLikeHandler(request, h) {
+  async deleteAlbumLikeHandler(request, _h) {
     const { id: albumId } = request.params;
     const { id: userId } = request.auth.credentials;
 
@@ -111,7 +109,6 @@ class AlbumsHandler {
     };
   }
 
-  // --- [NEW METHOD] ---
   async getAlbumLikesHandler(request, h) {
     const { id: albumId } = request.params;
 

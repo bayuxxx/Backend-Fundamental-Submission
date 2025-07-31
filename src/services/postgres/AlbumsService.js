@@ -4,13 +4,11 @@ const InvariantError = require("../../exceptions/InvariantError");
 const NotFoundError = require("../../exceptions/NotFoundError");
 
 class AlbumsService {
-  // --- [MODIFIED] ---
   constructor(cacheService = null) {
     this._pool = new Pool();
     this._cacheService = cacheService;
   }
 
-  // ... (addAlbum, getAllAlbums, etc. tidak berubah)
   async addAlbum({ name, year }) {
     const id = `album-${nanoid(16)}`;
     const query = {
@@ -96,7 +94,6 @@ class AlbumsService {
     }
   }
 
-  // --- [NEW METHOD] ---
   async addAlbumLike(albumId, userId) {
     await this.getAlbumById(albumId);
 
@@ -126,7 +123,6 @@ class AlbumsService {
     }
   }
 
-  // --- [NEW METHOD] ---
   async deleteAlbumLike(albumId, userId) {
     const query = {
       text: "DELETE FROM user_album_likes WHERE user_id = $1 AND album_id = $2 RETURNING id",
@@ -143,7 +139,6 @@ class AlbumsService {
     }
   }
 
-  // --- [NEW METHOD] ---
   async getAlbumLikes(albumId) {
     try {
       if (this._cacheService) {
@@ -151,11 +146,11 @@ class AlbumsService {
         return { likes: parseInt(result, 10), source: "cache" };
       }
     } catch (error) {
-      // Abaikan error jika cache miss, lanjutkan ke database
+      console.error(error);
     }
 
     await this.getAlbumById(albumId);
-    
+
     const query = {
       text: "SELECT COUNT(id) FROM user_album_likes WHERE album_id = $1",
       values: [albumId],
