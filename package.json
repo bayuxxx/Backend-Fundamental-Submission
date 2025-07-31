@@ -6,7 +6,7 @@
     "start-prod": "NODE_ENV=production node ./src/server.js",
     "start": "node ./src/server.js",
     "dev": "nodemon ./src/server.js",
-    "lint": "eslint ./src",
+    "lint": "eslint ./src . --fix",
     "migrate": "node-pg-migrate"
   },
   "keywords": [],
@@ -25,9 +25,16 @@
   },
   "dependencies": {
     "@hapi/hapi": "^21.4.0",
+    "@hapi/inert": "^7.1.0",
+    "@hapi/jwt": "^3.2.0",
+    "amqplib": "^0.10.8",
+    "auto-bind": "^5.0.1",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.0",
     "joi": "^17.13.3",
     "nanoid": "^5.1.5",
-    "pg": "^8.16.3"
+    "nodemailer": "^7.0.5",
+    "pg": "^8.16.3",
+    "redis": "^5.6.1"
   }
 }

@@ -1,12 +1,17 @@
-const Joi = require("joi");
+const Joi = require('joi');
 
 const AlbumPayloadSchema = Joi.object({
   name: Joi.string().required(),
-  year: Joi.number()
-    .integer()
-    .min(1900)
-    .max(new Date().getFullYear())
-    .required(),
+  year: Joi.number().integer().required(),
 });
 
-module.exports = { AlbumPayloadSchema };
+// --- [TAMBAHKAN INI] ---
+// Skema untuk memvalidasi header file gambar
+const ImageHeadersSchema = Joi.object({
+  'content-type': Joi.string().valid('image/apng', 'image/avif', 'image/gif', 'image/jpeg', 'image/png', 'image/webp').required(),
+}).unknown(); // .unknown() memperbolehkan header lain yang tidak divalidasi
+
+module.exports = {
+  AlbumPayloadSchema,
+  ImageHeadersSchema, // Ekspor skema baru
+};
