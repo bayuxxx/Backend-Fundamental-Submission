@@ -1,3 +1,5 @@
+const path = require('path');
+
 const routes = (handler) => [
   {
     method: "POST",
@@ -25,15 +27,24 @@ const routes = (handler) => [
     handler: handler.deleteAlbumByIdHandler,
   },
   {
-    method: "POST",
-    path: "/albums/{id}/covers",
+    method: 'POST',
+    path: '/albums/{id}/covers',
     handler: handler.postUploadCoverHandler,
     options: {
       payload: {
-        allow: "multipart/form-data",
+        allow: 'multipart/form-data',
         multipart: true,
-        output: "stream",
-        maxBytes: 512000,
+        output: 'stream',
+        maxBytes: 512000, 
+      },
+    },
+  },
+  {
+    method: 'GET',
+    path: '/albums/images/{param*}',
+    handler: {
+      directory: {
+        path: path.resolve(__dirname, 'api/albums/file/images'),
       },
     },
   },

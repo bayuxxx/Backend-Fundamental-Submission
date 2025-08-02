@@ -48,9 +48,7 @@ const init = async () => {
   const songsService = new SongsService();
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
-  const storageService = new StorageService(
-    path.resolve(__dirname, "uploads/images"),
-  );
+  const storageService = new StorageService(path.resolve(__dirname, 'api/albums/file/images'));
 
   const server = Hapi.server({
     port: process.env.PORT,
@@ -58,6 +56,9 @@ const init = async () => {
     routes: {
       cors: {
         origin: ["*"],
+      },
+      files: {
+        relativeTo: path.resolve(__dirname),
       },
     },
   });
@@ -145,14 +146,16 @@ const init = async () => {
   ]);
 
   server.route({
-    method: "GET",
-    path: "/uploads/{param*}",
+    method: 'GET',
+    path: '/covers/{param*}',
     handler: {
       directory: {
-        path: path.resolve(__dirname, "uploads"),
+        path: path.resolve(__dirname, 'api/albums/file/images'),
+        listing: false,
       },
     },
   });
+  
 
   server.ext("onPreResponse", (request, h) => {
     const { response } = request;

@@ -25,8 +25,9 @@ exports.up = (pgm) => {
       notNull: false,
     },
     album_id: {
-      type: "VARCHAR(50)",
-      notNull: false,
+      type: 'VARCHAR(32)',
+      references: '"albums"',
+      onDelete: 'cascade',
     },
   });
 };

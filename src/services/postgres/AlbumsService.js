@@ -79,18 +79,16 @@ class AlbumsService {
     }
   }
 
-  async addAlbumCover(albumId, coverUrl) {
+  async addAlbumCoverById(id, coverUrl) {
     const query = {
       text: 'UPDATE albums SET "coverUrl" = $1 WHERE id = $2 RETURNING id',
-      values: [coverUrl, albumId],
+      values: [coverUrl, id],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new NotFoundError(
-        "Gagal memperbarui sampul. Id album tidak ditemukan",
-      );
+      throw new NotFoundError('Gagal memperbarui sampul. Id tidak ditemukan');
     }
   }
 

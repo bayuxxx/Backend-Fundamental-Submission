@@ -68,20 +68,25 @@ class AlbumsHandler {
   }
 
   async postUploadCoverHandler(request, h) {
-    const { id: albumId } = request.params;
     const { cover } = request.payload;
-
+    const { id } = request.params;
+  
     this._validator.validateImageHeaders(cover.hapi.headers);
-    const fileUrl = await this._storageService.writeFile(cover, cover.hapi);
-    await this._service.addAlbumCover(albumId, fileUrl);
-
+  
+    const filename = await this._storageService.writeFile(cover, cover.hapi);
+  
+    const coverUrl = `http://${process.env.HOST}:${process.env.PORT}/covers/${filename}`;
+  
+    await this._service.addAlbumCoverById(id, coverUrl);
+  
     const response = h.response({
-      status: "success",
-      message: "Sampul berhasil diunggah",
+      status: 'success',
+      message: 'Sampul berhasil diunggah',
     });
     response.code(201);
     return response;
   }
+  
 
   async postAlbumLikeHandler(request, h) {
     const { id: albumId } = request.params;
